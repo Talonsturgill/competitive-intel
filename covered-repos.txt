@@ -1,3 +1,5 @@
+JackChen-me/open-multi-agent
 bytedance/deer-flow
+evalstate/fast-agent
 mem0ai/mem0
 google/adk-python
