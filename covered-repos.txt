@@ -4,5 +4,6 @@ evalstate/fast-agent
 mem0ai/mem0
 google/adk-python
 upstash/context7
-ChromeDevTools/chrome-devtools-mcp
+ChromDevTools/chrome-devtools-mcp
 agno-agi/agno
+aaif-goose/goose

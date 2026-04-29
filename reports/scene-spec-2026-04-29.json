@@ -1,0 +1,102 @@
+{
+  "version": "1.0",
+  "theme": {
+    "background": "#09090B",
+    "ink": "#FAFAFA",
+    "accent": "#8F74E0",
+    "muted": "#828282",
+    "rule": "#212123",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "meta": {
+    "title": "mem0 adaptive three-signal retrieval",
+    "subject": "mem0",
+    "brand_source": "https://mem0.ai",
+    "brand_extraction_method": "CSS custom properties from openmemory/ui/app/globals.css and docs/docs.json in cloned repo",
+    "theme_fallbacks": "none"
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "duration_frames": 72,
+      "layout": "center",
+      "text": "The memory layer problem was never about storage.",
+      "style": "bold",
+      "font": "serif",
+      "size": "display",
+      "animation": "fade-up",
+      "color": "ink"
+    },
+    {
+      "id": "scene-02",
+      "duration_frames": 60,
+      "layout": "center",
+      "text": "Retrieval is where production AI agents collapse.",
+      "style": "normal",
+      "font": "sans",
+      "size": "body",
+      "animation": "fade",
+      "color": "muted"
+    },
+    {
+      "id": "scene-03",
+      "duration_frames": 84,
+      "layout": "center",
+      "text": "Three signals. One query. Gated scoring.",
+      "style": "bold",
+      "font": "serif",
+      "size": "headline",
+      "animation": "word-by-word",
+      "color": "accent"
+    },
+    {
+      "id": "scene-04",
+      "duration_frames": 72,
+      "layout": "center",
+      "text": "Semantic floor. BM25 stack. Entity boost.",
+      "style": "normal",
+      "font": "sans",
+      "size": "body",
+      "animation": "fade-up",
+      "color": "ink"
+    },
+    {
+      "id": "scene-05",
+      "duration_frames": 72,
+      "layout": "center",
+      "text": "The gate fires before noise can compound.",
+      "style": "normal",
+      "font": "sans",
+      "size": "body",
+      "animation": "fade",
+      "color": "muted"
+    },
+    {
+      "id": "scene-06",
+      "duration_frames": 84,
+      "layout": "center",
+      "text": "Four n8n nodes. Three-signal retrieval. 20-point benchmark margin.",
+      "style": "bold",
+      "font": "serif",
+      "size": "headline",
+      "animation": "word-by-word",
+      "color": "accent"
+    },
+    {
+      "id": "scene-07",
+      "duration_frames": 96,
+      "layout": "center",
+      "text": "Memory retrieval is a fusion problem, not a search problem.",
+      "style": "bold",
+      "font": "serif",
+      "size": "display",
+      "animation": "fade-up",
+      "color": "ink"
+    }
+  ],
+  "audio": {
+    "style": "ambient",
+    "tempo": "measured"
+  }
+}
