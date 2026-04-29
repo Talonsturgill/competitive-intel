@@ -1,60 +1,29 @@
-# editorial-kinetic-type
+# Example Specs
 
-A skill that produces 25-second 1080x1080 MP4s in the editorial kinetic-typography style. Anthropic-adjacent default theme, fully brand-themable.
+Reference specs that show the format working. Use as starting templates when drafting new ones.
 
-See `SKILL.md` for the full invocation guide.
+## mem0-retrieval.json
 
-## What's in this directory
+The original. A teardown of mem0's gated hybrid retrieval algorithm. Demonstrates:
 
-- `SKILL.md` — the skill spec, read by Claude when invoking
-- `render_frames.py` — produces 750 PNG frames from a scene spec
-- `synth_audio.py` — produces the 25-second WAV soundtrack
-- `default_theme.json` — the cream/clay/ink baseline theme
-- `example_specs/` — reference scene specs
+- How to land a technical concept in 8 scenes without diagrams
+- The "three things" pattern (Scene 2) for enumerating signals/components
+- Accent line placement: scene 3 hits "ships bugs", scene 4 hits "a semantically wrong", scene 6 hits "drop", scene 8 hits "Fuse second"
+- The structural inversion between scenes 5 and 7 (scene 5 says "do this," scene 7 says "without this you can't undo X")
 
-## Local testing
+## Adapting the format
 
-The skill assumes the cloud sandbox environment (Claude Code Routines). To test locally:
+The 8-scene structure is a teardown template. To adapt it to a different topic:
 
-```bash
-cd .claude/skills/editorial-kinetic-type
-pip install cairosvg numpy scipy
-mkdir -p /tmp/frames /tmp/audio /tmp/output
+1. **Title**: name the pattern or concept
+2. **Three things**: list the 3 components or signals
+3. **Problem**: the failure mode in 2 lines
+4. **Specific case**: the concrete instance of that failure in 3 lines
+5. **Fix**: 2-word imperative + softer follow-up
+6. **Mechanism**: 3 lines explaining HOW the fix works, accent on the punchline
+7. **Consequence**: 3 lines on what the fix prevents
+8. **Close**: restate the fix + a 1-line builder takeaway
 
-# Render frames
-python render_frames.py example_specs/mem0-retrieval.json /tmp/frames
-
-# Synthesize audio
-python synth_audio.py /tmp/audio/soundtrack.wav
-
-# Mux
-ffmpeg -y -framerate 30 -i /tmp/frames/frame_%05d.png -i /tmp/audio/soundtrack.wav \
-  -c:v libx264 -profile:v baseline -level 3.1 -pix_fmt yuv420p \
-  -crf 18 -preset medium \
-  -c:a aac -b:a 128k -ar 44100 \
-  -movflags +faststart -shortest \
-  /tmp/output/video.mp4
-```
-
-Total time: ~90 seconds.
-
-## Editing the visual identity
-
-The structure (8 scenes, fixed timing, type sizes) should not be edited without a version bump. The places it IS safe to edit:
-
-- `default_theme.json` — change the baseline colors
-- Scene copy in any spec — within the character limits
-- Any new theme JSON file passed at render time
-
-## Editing the audio identity
-
-The audio is part of the format identity. Do not edit `synth_audio.py` without a version bump. If you need different audio for a specific brand, create a new skill (`editorial-kinetic-type-instrumental-X`) instead of forking this one.
-
-## Dependencies
-
-- Python 3.9+
-- cairosvg
-- numpy
-- scipy
-- ffmpeg (system binary)
-- Fonts: Bitstream Charter, DejaVu Serif, DejaVu Sans (preinstalled in the cloud sandbox)
+If your topic has more or fewer than 3 components, you can adapt scene 2:
+- 2 components: pad with descriptors, or swap to a "before/after" scene structure
+- 4+ components: don't. Pick the most important 3. Compression is part of the format.
