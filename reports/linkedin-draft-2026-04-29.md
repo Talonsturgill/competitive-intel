@@ -1,15 +1,9 @@
-# LinkedIn Draft - Week of 2026-04-29
+**Agno wraps any agent framework and ships it as a production service in twenty lines of code.** Most teams spend weeks after the agent works on session isolation, streaming, RBAC, approval gates, eval hooks, and tracing. Agno generates all of that as fifty-plus FastAPI endpoints around any framework.
 
----
+The part builders keep skipping is the eval harness. Agno runs a pre_check before every agent invocation and a post_check after. The framework ships four built-in eval types (accuracy, reliability, agent-as-judge, and performance). Each one subclasses BaseEval and attaches at startup without modifying the agent code.
 
-**Most AI agents forget everything the moment the conversation ends. mem0 just shipped a retrieval algorithm that changes the math on that.** The write side is one LLM call. Facts accumulate. Nothing is ever overwritten. Conflicts resolve at read time, not write time.
+The human approval flow is the other piece. Tool calls tagged with confirm freeze the run and emit an approval-pending event. The pipeline parks and waits for a webhook. No polling, no timeout guessing. The run resumes exactly where it stopped when approval arrives.
 
-The retrieval side is where the engineering lives.
+What Agno got right is separating agent logic from runtime concerns. LangGraph, DSPy, Claude Agent SDK, or raw Python all normalize to the same AgentProtocol interface. The eval hooks, sessions, and RBAC are wired at the runtime layer, not baked into the agent.
 
-Three scoring signals run in parallel. Semantic vector search finds the conceptual match. BM25 keyword scoring finds the lexical match, normalized via a sigmoid curve that adapts to query length. Entity matching adds a boost when retrieved memories share named entities with the query.
-
-Before those signals combine, a hard gate runs first. If the semantic score does not clear a minimum threshold, the candidate is dropped. BM25 and entity boosts cannot rescue a semantically irrelevant result. That one rule prevents a whole class of retrieval bugs that naive hybrid search silently ships.
-
-The fusion formula adapts its denominator to whichever signals are active. All three active means dividing by 2.5. Semantic alone means dividing by 1.0. Scores stay comparable whether a user has two memories or two thousand.
-
-Four n8n nodes implement this entire pattern. The part builders keep missing is the semantic gate before fusion. That is the specific thing mem0 got right.
+That separation is the pattern worth copying.
