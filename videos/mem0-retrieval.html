@@ -702,11 +702,172 @@
 
 <div class="controls">
   <button id="play">replay</button>
+  <button id="mute">sound: on</button>
   <div class="progress"><div class="progress-fill" id="pf"></div></div>
   <span class="clock" id="clock">00:00</span>
 </div>
 
 <script>
+  // ---------- audio engine ----------
+  let audioCtx = null;
+  let masterGain = null;
+  let liveNodes = [];
+  let soundEnabled = true;
+
+  function initAudio() {
+    if (audioCtx) return;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new Ctx();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.55;
+    masterGain.connect(audioCtx.destination);
+  }
+
+  function stopAllAudio() {
+    liveNodes.forEach(n => { try { n.stop(); } catch (e) {} });
+    liveNodes = [];
+  }
+
+  function track(node, when, dur) {
+    node.start(when);
+    node.stop(when + dur + 0.05);
+    liveNodes.push(node);
+  }
+
+  // sub-bass kick used for the 110bpm pulse and the drop thud
+  function playKick(when, freq, dur, vol) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq * 2.4, when);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(20, freq), when + 0.05);
+    gain.gain.setValueAtTime(0, when);
+    gain.gain.linearRampToValueAtTime(vol, when + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    osc.connect(gain).connect(masterGain);
+    track(osc, when, dur);
+  }
+
+  // short hi-freq noise click for scene transitions
+  function playTick(when) {
+    const len = Math.floor(audioCtx.sampleRate * 0.05);
+    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    const hp = audioCtx.createBiquadFilter();
+    hp.type = "highpass";
+    hp.frequency.value = 5000;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.35, when);
+    g.gain.exponentialRampToValueAtTime(0.001, when + 0.04);
+    src.connect(hp).connect(g).connect(masterGain);
+    track(src, when, 0.06);
+  }
+
+  // synth stab with filter sweep
+  function playStab(when, freq, vol) {
+    const osc = audioCtx.createOscillator();
+    const filter = audioCtx.createBiquadFilter();
+    const gain = audioCtx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.value = freq;
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(2400, when);
+    filter.frequency.exponentialRampToValueAtTime(220, when + 0.4);
+    filter.Q.value = 7;
+    gain.gain.setValueAtTime(0, when);
+    gain.gain.linearRampToValueAtTime(vol, when + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.5);
+    osc.connect(filter).connect(gain).connect(masterGain);
+    track(osc, when, 0.6);
+  }
+
+  // riser: pitched saw + filtered noise sweep
+  function playRiser(when, dur) {
+    const len = Math.floor(audioCtx.sampleRate * dur);
+    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * 0.4;
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    const hp = audioCtx.createBiquadFilter();
+    hp.type = "highpass";
+    hp.frequency.setValueAtTime(200, when);
+    hp.frequency.exponentialRampToValueAtTime(7000, when + dur);
+    const ng = audioCtx.createGain();
+    ng.gain.setValueAtTime(0.0001, when);
+    ng.gain.exponentialRampToValueAtTime(0.35, when + dur);
+    src.connect(hp).connect(ng).connect(masterGain);
+    track(src, when, dur);
+
+    const osc = audioCtx.createOscillator();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(80, when);
+    osc.frequency.exponentialRampToValueAtTime(1400, when + dur);
+    const lp = audioCtx.createBiquadFilter();
+    lp.type = "lowpass";
+    lp.frequency.value = 2200;
+    const og = audioCtx.createGain();
+    og.gain.setValueAtTime(0.0001, when);
+    og.gain.exponentialRampToValueAtTime(0.18, when + dur);
+    osc.connect(lp).connect(og).connect(masterGain);
+    track(osc, when, dur);
+  }
+
+  // long sine tail for the end card
+  function playTail(when, dur) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = 220;
+    gain.gain.setValueAtTime(0, when);
+    gain.gain.linearRampToValueAtTime(0.18, when + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    osc.connect(gain).connect(masterGain);
+    track(osc, when, dur);
+
+    // octave below for weight
+    const osc2 = audioCtx.createOscillator();
+    const g2 = audioCtx.createGain();
+    osc2.type = "sine";
+    osc2.frequency.value = 110;
+    g2.gain.setValueAtTime(0, when);
+    g2.gain.linearRampToValueAtTime(0.12, when + 0.02);
+    g2.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    osc2.connect(g2).connect(masterGain);
+    track(osc2, when, dur);
+  }
+
+  // assembles the full 60s score relative to t0 (audioCtx time)
+  function scheduleScore(t0) {
+    // opening hit
+    playKick(t0, 38, 1.6, 0.7);
+
+    // 110bpm pulse from scene 2 start (4s) until end-card start (50s)
+    const beat = 60 / 110;
+    for (let t = 4; t < 50; t += beat) {
+      // sidechain feel: slightly louder on every other beat
+      const vol = (Math.round(t / beat) % 2 === 0) ? 0.32 : 0.22;
+      playKick(t0 + t, 55, 0.22, vol);
+    }
+
+    // scene transition stabs
+    playStab(t0 + 4,  220, 0.22);
+    playStab(t0 + 9,  330, 0.24);
+    playStab(t0 + 30, 440, 0.22);
+    playStab(t0 + 40, 550, 0.22);
+
+    // hero moment: riser into the gate, then drop on shatter
+    playRiser(t0 + 21, 2.0);
+    playKick(t0 + 23, 33, 1.4, 0.85);
+    playTick(t0 + 23);
+
+    // tail under the end card
+    playTail(t0 + 50, 9);
+  }
+
   // ---------- timeline ----------
   // Each scene: [id, start, end] in ms
   const TL = [
@@ -843,6 +1004,11 @@
     }
   }
 
+  function startVisuals() {
+    startedAt = performance.now();
+    raf = requestAnimationFrame(tick);
+  }
+
   function play() {
     cancelAnimationFrame(raf);
     // reset
@@ -854,11 +1020,30 @@
       s.classList.remove("active");
       void s.offsetWidth;
     });
-    startedAt = performance.now();
-    raf = requestAnimationFrame(tick);
+    stopAllAudio();
+
+    if (!soundEnabled) {
+      startVisuals();
+      return;
+    }
+
+    initAudio();
+    // resume() requires a user gesture on first play — if it stays suspended,
+    // visuals still run, audio stays silent until next replay click
+    audioCtx.resume().then(() => {
+      if (audioCtx.state === "running") {
+        scheduleScore(audioCtx.currentTime + 0.1);
+      }
+      startVisuals();
+    }).catch(startVisuals);
   }
 
   $("play").addEventListener("click", play);
+  $("mute").addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    $("mute").textContent = "sound: " + (soundEnabled ? "on" : "off");
+    if (!soundEnabled) stopAllAudio();
+  });
   play();
 </script>
 </body>
