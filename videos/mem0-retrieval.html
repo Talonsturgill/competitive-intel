@@ -717,11 +717,32 @@
   function initAudio() {
     if (audioCtx) return;
     const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) {
+      console.warn("[mem0] Web Audio API not supported");
+      return;
+    }
     audioCtx = new Ctx();
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.55;
+    masterGain.gain.value = 0.7;
     masterGain.connect(audioCtx.destination);
+    console.log("[mem0] audio context created, state:", audioCtx.state);
   }
+
+  // one-shot sanity beep — call playBeep() in devtools to verify audio path
+  window.playBeep = function () {
+    initAudio();
+    audioCtx.resume();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.frequency.value = 440;
+    g.gain.setValueAtTime(0, audioCtx.currentTime);
+    g.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    o.connect(g).connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + 0.6);
+    console.log("[mem0] beep at", audioCtx.currentTime, "state:", audioCtx.state);
+  };
 
   function stopAllAudio() {
     liveNodes.forEach(n => { try { n.stop(); } catch (e) {} });
@@ -1009,9 +1030,9 @@
     raf = requestAnimationFrame(tick);
   }
 
-  function play() {
+  async function play() {
     cancelAnimationFrame(raf);
-    // reset
+    // reset visuals
     $("s1").dataset.fell = "";
     buildHeadline();
     buildDots();
@@ -1022,20 +1043,25 @@
     });
     stopAllAudio();
 
-    if (!soundEnabled) {
-      startVisuals();
-      return;
+    if (soundEnabled) {
+      initAudio();
+      if (audioCtx) {
+        try {
+          await audioCtx.resume();
+        } catch (e) {
+          console.error("[mem0] resume failed:", e);
+        }
+        console.log("[mem0] post-resume state:", audioCtx.state, "currentTime:", audioCtx.currentTime);
+        if (audioCtx.state === "running") {
+          scheduleScore(audioCtx.currentTime + 0.15);
+          console.log("[mem0] score scheduled, liveNodes:", liveNodes.length);
+        } else {
+          console.warn("[mem0] audio still suspended — click replay to enable");
+        }
+      }
     }
 
-    initAudio();
-    // resume() requires a user gesture on first play — if it stays suspended,
-    // visuals still run, audio stays silent until next replay click
-    audioCtx.resume().then(() => {
-      if (audioCtx.state === "running") {
-        scheduleScore(audioCtx.currentTime + 0.1);
-      }
-      startVisuals();
-    }).catch(startVisuals);
+    startVisuals();
   }
 
   $("play").addEventListener("click", play);
