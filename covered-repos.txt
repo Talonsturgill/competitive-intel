@@ -1,0 +1,9 @@
+JackChen-me/open-multi-agent
+bytedance/deer-flow
+evalstate/fast-agent
+mem0ai/mem0
+google/adk-python
+upstash/context7
+ChromDevTools/chrome-devtools-mcp
+agno-agi/agno
+aaif-goose/goose
