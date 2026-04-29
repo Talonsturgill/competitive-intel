@@ -1,5 +1,6 @@
 {
-  "version": "1.0",
+  "date": "2026-04-29",
+  "topic": "mem0 adaptive three-signal retrieval",
   "theme": {
     "background": "#09090B",
     "ink": "#FAFAFA",
@@ -9,94 +10,49 @@
     "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
     "sans": "'DejaVu Sans', sans-serif"
   },
-  "meta": {
-    "title": "mem0 adaptive three-signal retrieval",
-    "subject": "mem0",
-    "brand_source": "https://mem0.ai",
-    "brand_extraction_method": "CSS custom properties from openmemory/ui/app/globals.css and docs/docs.json in cloned repo",
-    "theme_fallbacks": "none"
-  },
-  "scenes": [
-    {
-      "id": "scene-01",
-      "duration_frames": 72,
-      "layout": "center",
-      "text": "The memory layer problem was never about storage.",
-      "style": "bold",
-      "font": "serif",
-      "size": "display",
-      "animation": "fade-up",
-      "color": "ink"
+  "scenes": {
+    "title": {
+      "headline": "Hybrid Retrieval",
+      "eyebrow": "what mem0 just shipped"
     },
-    {
-      "id": "scene-02",
-      "duration_frames": 60,
-      "layout": "center",
-      "text": "Retrieval is where production AI agents collapse.",
-      "style": "normal",
-      "font": "sans",
-      "size": "body",
-      "animation": "fade",
-      "color": "muted"
+    "three_things": {
+      "eyebrow": "THREE SIGNALS",
+      "items": [
+        {"name": "Semantic", "descriptor": "vector match"},
+        {"name": "BM25", "descriptor": "lexical match"},
+        {"name": "Entity", "descriptor": "linked names"}
+      ]
     },
-    {
-      "id": "scene-03",
-      "duration_frames": 84,
-      "layout": "center",
-      "text": "Three signals. One query. Gated scoring.",
-      "style": "bold",
-      "font": "serif",
-      "size": "headline",
-      "animation": "word-by-word",
-      "color": "accent"
+    "problem": {
+      "line_a": "Fusion alone",
+      "line_b": "ships bugs.",
+      "accent_line": "b"
     },
-    {
-      "id": "scene-04",
-      "duration_frames": 72,
-      "layout": "center",
-      "text": "Semantic floor. BM25 stack. Entity boost.",
-      "style": "normal",
-      "font": "sans",
-      "size": "body",
-      "animation": "fade-up",
-      "color": "ink"
+    "specific_case": {
+      "line_a": "BM25 can rescue",
+      "line_b": "a semantically wrong",
+      "line_c": "match.",
+      "accent_line": "b"
     },
-    {
-      "id": "scene-05",
-      "duration_frames": 72,
-      "layout": "center",
-      "text": "The gate fires before noise can compound.",
-      "style": "normal",
-      "font": "sans",
-      "size": "body",
-      "animation": "fade",
-      "color": "muted"
+    "fix": {
+      "primary": "Gate first.",
+      "secondary": "Fuse second."
     },
-    {
-      "id": "scene-06",
-      "duration_frames": 84,
-      "layout": "center",
-      "text": "Four n8n nodes. Three-signal retrieval. 20-point benchmark margin.",
-      "style": "bold",
-      "font": "serif",
-      "size": "headline",
-      "animation": "word-by-word",
-      "color": "accent"
+    "mechanism": {
+      "line_a": "If the semantic score",
+      "line_b": "is below threshold",
+      "line_c": "drop.",
+      "accent_line": "c"
     },
-    {
-      "id": "scene-07",
-      "duration_frames": 96,
-      "layout": "center",
-      "text": "Memory retrieval is a fusion problem, not a search problem.",
-      "style": "bold",
-      "font": "serif",
-      "size": "display",
-      "animation": "fade-up",
-      "color": "ink"
+    "consequence": {
+      "line_a": "BM25 can't rescue",
+      "line_b": "what the gate",
+      "line_c": "already dropped."
+    },
+    "close": {
+      "primary": "Gate first.",
+      "accent": "Fuse second.",
+      "subtitle": "the part most builders miss."
     }
-  ],
-  "audio": {
-    "style": "ambient",
-    "tempo": "measured"
   }
 }
