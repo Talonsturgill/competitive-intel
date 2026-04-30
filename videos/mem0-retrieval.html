@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>mem0 — retrieval, gated</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0B;
+    --fg: #F5F5F4;
+    --dim: #6E6E72;
+    --line: #1E1E22;
+    --accent: #7C5CFF;
+    --accent-soft: rgba(124, 92, 255, 0.18);
+    --danger: #FF5C7A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: #050506;
+    color: var(--fg);
+    font-family: "Inter Tight", system-ui, sans-serif;
+    height: 100%;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .stage {
+    position: relative;
+    width: min(440px, calc(100vh * 9 / 16 - 80px));
+    aspect-ratio: 9 / 16;
+    background: var(--bg);
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: 0 30px 80px -30px rgba(124, 92, 255, 0.35),
+                0 0 0 1px #1a1a1f;
+  }
+
+  /* radial accent glow behind hero moments */
+  .glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 50% 50%,
+      var(--accent-soft) 0%,
+      transparent 55%
+    );
+    opacity: 0;
+    transition: opacity .6s ease;
+    pointer-events: none;
+  }
+  .glow.on { opacity: 1; }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: calc(100% / 12) calc(100% / 12);
+    opacity: 0;
+    transition: opacity .5s ease;
+    pointer-events: none;
+  }
+  .grid.on { opacity: 1; }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 32px;
+  }
+  .scene.active { opacity: 1; pointer-events: auto; }
+
+  /* ---------- SCENE 1: cold open ---------- */
+  #s1 .headline {
+    font-weight: 800;
+    font-size: 44px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+  #s1 .ch {
+    display: inline-block;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: rise .5s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  #s1.active .ch.fall {
+    animation: fall .45s cubic-bezier(.65,0,.35,1) forwards;
+  }
+  @keyframes rise { to { transform: translateY(0); opacity: 1; } }
+  @keyframes fall {
+    to { transform: translateY(80px) rotate(8deg); opacity: 0; }
+  }
+  #s1 .glitch {
+    display: inline-block;
+    animation: glitch .25s steps(2) 1;
+  }
+  @keyframes glitch {
+    0%   { transform: translate(0,0); color: var(--fg); }
+    25%  { transform: translate(-2px,1px); color: var(--accent); }
+    50%  { transform: translate(2px,-1px); color: var(--danger); }
+    75%  { transform: translate(-1px,0); color: var(--accent); }
+    100% { transform: translate(0,0); color: var(--fg); }
+  }
+
+  /* ---------- SCENE 2: thesis ---------- */
+  #s2 .title {
+    font-weight: 800;
+    font-size: 42px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin-bottom: 24px;
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  #s2.active .title { animation: rise .6s .1s cubic-bezier(.16,1,.3,1) forwards; }
+
+  #s2 .clauses {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--dim);
+    text-align: center;
+    line-height: 1.9;
+  }
+  #s2 .clause { opacity: 0; }
+  #s2.active .clause { animation: typeIn .35s ease-out forwards; }
+  #s2.active .clause:nth-child(1) { animation-delay: .8s; }
+  #s2.active .clause:nth-child(2) { animation-delay: 1.2s; }
+  #s2.active .clause:nth-child(3) { animation-delay: 1.6s; }
+  #s2.active .clause:nth-child(4) { animation-delay: 2.0s; }
+  @keyframes typeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); color: var(--fg); }
+  }
+
+  /* ---------- SCENE 3: three signals ---------- */
+  #s3 {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 56px;
+  }
+  #s3 .heading {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--dim);
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  #s3 .lanes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    flex: 1;
+  }
+  .lane {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  #s3.active .lane:nth-child(1) { animation: rise .55s .1s cubic-bezier(.16,1,.3,1) forwards; }
+  #s3.active .lane:nth-child(2) { animation: rise .55s .25s cubic-bezier(.16,1,.3,1) forwards; }
+  #s3.active .lane:nth-child(3) { animation: rise .55s .4s cubic-bezier(.16,1,.3,1) forwards; }
+
+  .lane-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--fg);
+  }
+  .lane-viz {
+    width: 100%;
+    height: 130px;
+    position: relative;
+  }
+  .lane-score {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* semantic dots */
+  .dot {
+    position: absolute;
+    width: 5px; height: 5px;
+    background: var(--dim);
+    border-radius: 50%;
+  }
+  #s3.active .dot {
+    animation: collapseDot 1.6s .6s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  @keyframes collapseDot {
+    to {
+      left: 50% !important;
+      top: 50% !important;
+      background: var(--accent);
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  /* sigmoid svg */
+  #sigmoid path {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+  }
+  #s3.active #sigmoid path {
+    animation: drawLine 1.4s .5s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+  #sigmoidSlider {
+    position: absolute;
+    bottom: 6px; left: 0;
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+    opacity: 0;
+  }
+  #s3.active #sigmoidSlider { animation: sweep 1.6s .9s ease-out forwards; }
+  @keyframes sweep {
+    0% { opacity: 0; left: 0%; }
+    20% { opacity: 1; }
+    100% { opacity: 1; left: calc(100% - 6px); }
+  }
+
+  /* entity tags */
+  .tag {
+    position: absolute;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--dim);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2px 6px;
+    opacity: 0;
+  }
+  #s3.active .tag {
+    animation: tagSnap .5s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  #s3.active .tag.t1 { animation-delay: .7s; }
+  #s3.active .tag.t2 { animation-delay: .95s; }
+  #s3.active .tag.t3 { animation-delay: 1.2s; }
+  @keyframes tagSnap {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); color: var(--accent); border-color: var(--accent); }
+  }
+
+  /* ---------- SCENE 4: the gate ---------- */
+  #s4 { justify-content: center; gap: 20px; }
+  #s4 .gate-stage {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .pipeline-line {
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 1px;
+    background: var(--line);
+    transform: translateY(-50%);
+  }
+  .gate-bar {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: 3px;
+    height: 60%;
+    background: var(--accent);
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: center;
+    box-shadow: 0 0 20px var(--accent);
+  }
+  #s4.active .gate-bar { animation: gateRise .5s .3s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes gateRise { to { transform: translateX(-50%) scaleY(1); } }
+
+  .gate-label {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    white-space: nowrap;
+    opacity: 0;
+  }
+  #s4.active .gate-label { animation: typeIn .4s .8s ease-out forwards; }
+
+  .candidate {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background: var(--fg);
+  }
+  .candidate.bad { animation: shatter 1.6s 1.2s cubic-bezier(.4,0,.6,1) forwards; opacity: 0; }
+  @keyframes shatter {
+    0%   { left: 5%; opacity: 1; background: var(--fg); }
+    50%  { left: 44%; opacity: 1; background: var(--danger); }
+    60%  { left: 46%; opacity: 1; transform: translateY(-50%) scale(1.3); }
+    65%  { left: 46%; opacity: 0; transform: translateY(-50%) scale(0); }
+    100% { opacity: 0; }
+  }
+
+  .particle {
+    position: absolute;
+    top: 50%; left: 46%;
+    width: 3px; height: 3px;
+    background: var(--danger);
+    border-radius: 50%;
+    opacity: 0;
+  }
+  #s4.active .particle { animation: spark 1s 1.85s ease-out forwards; }
+  @keyframes spark {
+    0%   { opacity: 1; transform: translate(0,0); }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)); }
+  }
+
+  #s4 .overlay-text {
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-align: center;
+    opacity: 0;
+  }
+  #s4.active .overlay-text { animation: typeIn .5s 3.0s ease-out forwards; }
+  #s4 .overlay-text em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  /* ---------- SCENE 5: fusion ---------- */
+  #s5 { gap: 28px; }
+  #s5 .formula {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 22px;
+    color: var(--fg);
+    text-align: center;
+    line-height: 1.8;
+    opacity: 0;
+  }
+  #s5.active .formula { animation: rise .6s .1s cubic-bezier(.16,1,.3,1) forwards; }
+  #s5 .denom {
+    color: var(--accent);
+    display: inline-block;
+    min-width: 36px;
+  }
+  #s5 .toggles {
+    display: flex;
+    gap: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--dim);
+    opacity: 0;
+  }
+  #s5.active .toggles { animation: rise .5s .6s cubic-bezier(.16,1,.3,1) forwards; }
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .checkbox {
+    width: 12px; height: 12px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    position: relative;
+    transition: all .2s;
+  }
+  .checkbox.on {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .checkbox.on::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-left: 1.5px solid var(--bg);
+    border-bottom: 1.5px solid var(--bg);
+    transform: rotate(-45deg) translate(0, -1px);
+  }
+
+  #s5 .readout {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+  }
+  #s5.active .readout { animation: rise .5s 1.0s cubic-bezier(.16,1,.3,1) forwards; }
+  .readout-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--dim);
+  }
+  .readout-row .val {
+    color: var(--fg);
+  }
+  .bar-track {
+    height: 4px;
+    width: 100%;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    width: 72%;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* ---------- SCENE 6: n8n nodes ---------- */
+  #s6 { gap: 24px; }
+  #s6 .heading {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--dim);
+    text-transform: uppercase;
+    opacity: 0;
+  }
+  #s6.active .heading { animation: typeIn .4s .1s ease-out forwards; }
+
+  #s6 .nodes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  .node {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 10px 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--fg);
+    text-align: center;
+    flex: 1 1 calc(50% - 12px);
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(-20px);
+    position: relative;
+  }
+  #s6.active .node:nth-child(1) { animation: slideIn .4s .4s cubic-bezier(.16,1,.3,1) forwards; }
+  #s6.active .node:nth-child(2) { animation: slideIn .4s .65s cubic-bezier(.16,1,.3,1) forwards; }
+  #s6.active .node:nth-child(3) { animation: slideIn .4s .9s cubic-bezier(.16,1,.3,1) forwards; }
+  #s6.active .node:nth-child(4) { animation: slideIn .4s 1.15s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .node.gate {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  #s6.active .node.gate {
+    animation: slideIn .4s .65s cubic-bezier(.16,1,.3,1) forwards,
+               pulse 1.4s 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 var(--accent-soft); }
+    50%      { box-shadow: 0 0 0 6px transparent; }
+  }
+
+  #s6 .caption {
+    font-weight: 800;
+    font-size: 22px;
+    text-align: center;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    opacity: 0;
+  }
+  #s6.active .caption { animation: rise .5s 1.6s cubic-bezier(.16,1,.3,1) forwards; }
+  #s6 .caption em { font-style: normal; color: var(--accent); }
+
+  /* ---------- SCENE 7: end card ---------- */
+  #s7 { gap: 14px; }
+  #s7 .end-title {
+    font-weight: 800;
+    font-size: 36px;
+    letter-spacing: -0.02em;
+    text-align: center;
+    line-height: 1.1;
+    opacity: 0;
+  }
+  #s7.active .end-title { animation: rise .6s .1s cubic-bezier(.16,1,.3,1) forwards; }
+  #s7 .end-title em { font-style: normal; color: var(--accent); }
+  #s7 .end-cta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--dim);
+    opacity: 0;
+  }
+  #s7.active .end-cta { animation: typeIn .4s .8s ease-out forwards; }
+
+  /* ---------- progress bar + controls ---------- */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: min(440px, calc(100vh * 9 / 16 - 80px));
+    color: var(--dim);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+  }
+  .progress {
+    flex: 1;
+    height: 2px;
+    background: var(--line);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+  }
+  button {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--fg);
+    font-family: inherit;
+    font-size: inherit;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+
+  .clock {
+    font-variant-numeric: tabular-nums;
+    color: var(--fg);
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <div class="grid" id="grid"></div>
+  <div class="glow" id="glow"></div>
+
+  <!-- Scene 1: cold open -->
+  <section class="scene" id="s1">
+    <div class="headline" id="headline"></div>
+  </section>
+
+  <!-- Scene 2: thesis -->
+  <section class="scene" id="s2">
+    <div class="title">mem0 changed the math.</div>
+    <div class="clauses">
+      <div class="clause">write: 1 LLM call</div>
+      <div class="clause">facts accumulate</div>
+      <div class="clause">nothing overwritten</div>
+      <div class="clause">conflicts resolve at read time</div>
+    </div>
+  </section>
+
+  <!-- Scene 3: three signals -->
+  <section class="scene" id="s3">
+    <div class="heading">three signals · in parallel</div>
+    <div class="lanes">
+      <div class="lane">
+        <div class="lane-label">SEMANTIC</div>
+        <div class="lane-viz" id="dotField"></div>
+        <div class="lane-score">0.91</div>
+      </div>
+      <div class="lane">
+        <div class="lane-label">BM25</div>
+        <div class="lane-viz">
+          <svg id="sigmoid" viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%">
+            <path d="M 0 90 Q 30 88 50 50 T 100 10"
+                  fill="none" stroke="#7C5CFF" stroke-width="1.5" />
+          </svg>
+          <div id="sigmoidSlider"></div>
+        </div>
+        <div class="lane-score">0.74</div>
+      </div>
+      <div class="lane">
+        <div class="lane-label">ENTITY</div>
+        <div class="lane-viz" style="position:relative;">
+          <div class="tag t1" style="top: 14px; left: 8px;">@user</div>
+          <div class="tag t2" style="top: 52px; left: 30px;">#project</div>
+          <div class="tag t3" style="top: 90px; left: 12px;">$org</div>
+        </div>
+        <div class="lane-score">+0.18</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 4: the gate -->
+  <section class="scene" id="s4">
+    <div class="gate-stage">
+      <div class="pipeline-line"></div>
+      <div class="gate-bar"></div>
+      <div class="gate-label">SEMANTIC GATE · MIN THRESHOLD</div>
+      <div class="candidate bad"></div>
+      <!-- particles -->
+      <div class="particle" style="--dx: -30px; --dy: -20px"></div>
+      <div class="particle" style="--dx: 30px; --dy: -25px"></div>
+      <div class="particle" style="--dx: -25px; --dy: 30px"></div>
+      <div class="particle" style="--dx: 35px; --dy: 20px"></div>
+      <div class="particle" style="--dx: 0px; --dy: -35px"></div>
+      <div class="particle" style="--dx: 0px; --dy: 35px"></div>
+    </div>
+    <div class="overlay-text">BM25 can't rescue<br/><em>semantic irrelevance.</em></div>
+  </section>
+
+  <!-- Scene 5: fusion -->
+  <section class="scene" id="s5">
+    <div class="formula">
+      score = (s<sub>sem</sub> + s<sub>bm25</sub> + s<sub>ent</sub>) / <span class="denom" id="denom">2.5</span>
+    </div>
+    <div class="toggles">
+      <div class="toggle"><div class="checkbox on" id="cbSem"></div>SEM</div>
+      <div class="toggle"><div class="checkbox on" id="cbBm">  </div>BM25</div>
+      <div class="toggle"><div class="checkbox on" id="cbEnt"> </div>ENT</div>
+    </div>
+    <div class="readout">
+      <div class="readout-row">
+        <span>memories indexed</span>
+        <span class="val" id="memCount">0</span>
+      </div>
+      <div class="readout-row">
+        <span>fused score</span>
+        <span class="val">0.83</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+      <div class="readout-row" style="font-size: 9px;">
+        <span>2 memories ←→ 2,000 memories</span>
+        <span style="color: var(--accent);">stable</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scene 6: n8n nodes -->
+  <section class="scene" id="s6">
+    <div class="heading">four nodes · one pattern</div>
+    <div class="nodes">
+      <div class="node">SEMANTIC<br/>SEARCH</div>
+      <div class="node gate">SEMANTIC<br/>GATE</div>
+      <div class="node">BM25 + ENTITY<br/>SCORING</div>
+      <div class="node">ADAPTIVE<br/>FUSION</div>
+    </div>
+    <div class="caption">One <em>gate</em> makes<br/>the difference.</div>
+  </section>
+
+  <!-- Scene 7: end card -->
+  <section class="scene" id="s7">
+    <div class="end-title">mem0 got the <em>gate</em> right.</div>
+    <div class="end-cta">read the teardown →</div>
+  </section>
+</div>
+
+<div class="controls">
+  <button id="play">replay</button>
+  <button id="mute">sound: on</button>
+  <div class="progress"><div class="progress-fill" id="pf"></div></div>
+  <span class="clock" id="clock">00:00</span>
+</div>
+
+<script>
+  // ---------- audio engine ----------
+  let audioCtx = null;
+  let masterGain = null;
+  let liveNodes = [];
+  let soundEnabled = true;
+
+  function initAudio() {
+    if (audioCtx) return;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) {
+      console.warn("[mem0] Web Audio API not supported");
+      return;
+    }
+    audioCtx = new Ctx();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.7;
+    masterGain.connect(audioCtx.destination);
+    console.log("[mem0] audio context created, state:", audioCtx.state);
+  }
+
+  // one-shot sanity beep — call playBeep() in devtools to verify audio path
+  window.playBeep = function () {
+    initAudio();
+    audioCtx.resume();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.frequency.value = 440;
+    g.gain.setValueAtTime(0, audioCtx.currentTime);
+    g.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    o.connect(g).connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + 0.6);
+    console.log("[mem0] beep at", audioCtx.currentTime, "state:", audioCtx.state);
+  };
+
+  function stopAllAudio() {
+    liveNodes.forEach(n => { try { n.stop(); } catch (e) {} });
+    liveNodes = [];
+  }
+
+  function track(node, when, dur) {
+    node.start(when);
+    node.stop(when + dur + 0.05);
+    liveNodes.push(node);
+  }
+
+  // sub-bass kick used for the 110bpm pulse and the drop thud
+  function playKick(when, freq, dur, vol) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq * 2.4, when);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(20, freq), when + 0.05);
+    gain.gain.setValueAtTime(0, when);
+    gain.gain.linearRampToValueAtTime(vol, when + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    osc.connect(gain).connect(masterGain);
+    track(osc, when, dur);
+  }
+
+  // short hi-freq noise click for scene transitions
+  function playTick(when) {
+    const len = Math.floor(audioCtx.sampleRate * 0.05);
+    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    const hp = audioCtx.createBiquadFilter();
+    hp.type = "highpass";
+    hp.frequency.value = 5000;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.35, when);
+    g.gain.exponentialRampToValueAtTime(0.001, when + 0.04);
+    src.connect(hp).connect(g).connect(masterGain);
+    track(src, when, 0.06);
+  }
+
+  // synth stab with filter sweep
+  function playStab(when, freq, vol) {
+    const osc = audioCtx.createOscillator();
+    const filter = audioCtx.createBiquadFilter();
+    const gain = audioCtx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.value = freq;
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(2400, when);
+    filter.frequency.exponentialRampToValueAtTime(220, when + 0.4);
+    filter.Q.value = 7;
+    gain.gain.setValueAtTime(0, when);
+    gain.gain.linearRampToValueAtTime(vol, when + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.5);
+    osc.connect(filter).connect(gain).connect(masterGain);
+    track(osc, when, 0.6);
+  }
+
+  // riser: pitched saw + filtered noise sweep
+  function playRiser(when, dur) {
+    const len = Math.floor(audioCtx.sampleRate * dur);
+    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * 0.4;
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    const hp = audioCtx.createBiquadFilter();
+    hp.type = "highpass";
+    hp.frequency.setValueAtTime(200, when);
+    hp.frequency.exponentialRampToValueAtTime(7000, when + dur);
+    const ng = audioCtx.createGain();
+    ng.gain.setValueAtTime(0.0001, when);
+    ng.gain.exponentialRampToValueAtTime(0.35, when + dur);
+    src.connect(hp).connect(ng).connect(masterGain);
+    track(src, when, dur);
+
+    const osc = audioCtx.createOscillator();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(80, when);
+    osc.frequency.exponentialRampToValueAtTime(1400, when + dur);
+    const lp = audioCtx.createBiquadFilter();
+    lp.type = "lowpass";
+    lp.frequency.value = 2200;
+    const og = audioCtx.createGain();
+    og.gain.setValueAtTime(0.0001, when);
+    og.gain.exponentialRampToValueAtTime(0.18, when + dur);
+    osc.connect(lp).connect(og).connect(masterGain);
+    track(osc, when, dur);
+  }
+
+  // long sine tail for the end card
+  function playTail(when, dur) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = 220;
+    gain.gain.setValueAtTime(0, when);
+    gain.gain.linearRampToValueAtTime(0.18, when + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    osc.connect(gain).connect(masterGain);
+    track(osc, when, dur);
+
+    // octave below for weight
+    const osc2 = audioCtx.createOscillator();
+    const g2 = audioCtx.createGain();
+    osc2.type = "sine";
+    osc2.frequency.value = 110;
+    g2.gain.setValueAtTime(0, when);
+    g2.gain.linearRampToValueAtTime(0.12, when + 0.02);
+    g2.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+    osc2.connect(g2).connect(masterGain);
+    track(osc2, when, dur);
+  }
+
+  // assembles the full 60s score relative to t0 (audioCtx time)
+  function scheduleScore(t0) {
+    // opening hit
+    playKick(t0, 38, 1.6, 0.7);
+
+    // 110bpm pulse from scene 2 start (4s) until end-card start (50s)
+    const beat = 60 / 110;
+    for (let t = 4; t < 50; t += beat) {
+      // sidechain feel: slightly louder on every other beat
+      const vol = (Math.round(t / beat) % 2 === 0) ? 0.32 : 0.22;
+      playKick(t0 + t, 55, 0.22, vol);
+    }
+
+    // scene transition stabs
+    playStab(t0 + 4,  220, 0.22);
+    playStab(t0 + 9,  330, 0.24);
+    playStab(t0 + 30, 440, 0.22);
+    playStab(t0 + 40, 550, 0.22);
+
+    // hero moment: riser into the gate, then drop on shatter
+    playRiser(t0 + 21, 2.0);
+    playKick(t0 + 23, 33, 1.4, 0.85);
+    playTick(t0 + 23);
+
+    // tail under the end card
+    playTail(t0 + 50, 9);
+  }
+
+  // ---------- timeline ----------
+  // Each scene: [id, start, end] in ms
+  const TL = [
+    ["s1",  0,    4000 ],
+    ["s2",  4000, 9000 ],
+    ["s3",  9000, 20000],
+    ["s4",  20000,30000],
+    ["s5",  30000,40000],
+    ["s6",  40000,50000],
+    ["s7",  50000,60000],
+  ];
+  const DURATION = 60000;
+
+  const $ = (id) => document.getElementById(id);
+  const scenes = TL.map(([id]) => $(id));
+  const grid = $("grid");
+  const glow = $("glow");
+
+  let startedAt = 0;
+  let raf = null;
+
+  function buildHeadline() {
+    const text = "Most AI agents forget.";
+    const el = $("headline");
+    el.innerHTML = "";
+    [...text].forEach((c, i) => {
+      const span = document.createElement("span");
+      span.className = "ch";
+      span.textContent = c === " " ? " " : c;
+      span.style.animationDelay = (i * 35) + "ms";
+      el.appendChild(span);
+    });
+  }
+
+  function buildDots() {
+    const f = $("dotField");
+    f.innerHTML = "";
+    const N = 14;
+    for (let i = 0; i < N; i++) {
+      const d = document.createElement("div");
+      d.className = "dot";
+      d.style.left = (Math.random() * 90 + 5) + "%";
+      d.style.top  = (Math.random() * 90 + 5) + "%";
+      d.style.animationDelay = (i * 60) + "ms";
+      f.appendChild(d);
+    }
+  }
+
+  function setActive(idx) {
+    scenes.forEach((s, i) => s.classList.toggle("active", i === idx));
+    // grid only on data-heavy scenes
+    grid.classList.toggle("on", [2, 4, 5].includes(idx));
+    // glow on hero moments
+    glow.classList.toggle("on", [3, 6].includes(idx));
+  }
+
+  function triggerScene1FallAt(t) {
+    if (t > 2400 && !$("s1").dataset.fell) {
+      $("s1").dataset.fell = "1";
+      const chars = $("headline").querySelectorAll(".ch");
+      // keep "forget" — the last 7 chars including the period
+      const keep = "forget.".length;
+      chars.forEach((ch, i) => {
+        if (i < chars.length - keep) {
+          ch.style.animationDelay = ((chars.length - keep - i) * 60) + "ms";
+          ch.classList.add("fall");
+        }
+      });
+      setTimeout(() => {
+        const remaining = $("headline").querySelectorAll(".ch:not(.fall)");
+        remaining.forEach(ch => ch.classList.add("glitch"));
+      }, 1000);
+    }
+  }
+
+  // scene 5: animate fusion checkboxes + memCount
+  function animateScene5(localT) {
+    const cbBm = $("cbBm");
+    const cbEnt = $("cbEnt");
+    const denom = $("denom");
+    const fill = $("barFill");
+
+    // toggle pattern: all on -> ent off -> bm off -> all on
+    if (localT < 3000) {
+      cbBm.classList.add("on"); cbEnt.classList.add("on");
+      denom.textContent = "2.5";
+      fill.style.width = "72%";
+    } else if (localT < 5500) {
+      cbEnt.classList.remove("on");
+      denom.textContent = "1.5";
+      fill.style.width = "70%";
+    } else if (localT < 8000) {
+      cbBm.classList.remove("on");
+      denom.textContent = "1.0";
+      fill.style.width = "73%";
+    } else {
+      cbBm.classList.add("on"); cbEnt.classList.add("on");
+      denom.textContent = "2.5";
+      fill.style.width = "72%";
+    }
+
+    // tick memory count 2 -> 2000
+    const p = Math.min(1, localT / 9000);
+    // exp curve looks more alive than linear
+    const v = Math.round(2 + (Math.pow(p, 0.4)) * 1998);
+    $("memCount").textContent = v.toLocaleString();
+  }
+
+  function tick() {
+    const t = performance.now() - startedAt;
+    const clamped = Math.min(t, DURATION);
+
+    // figure out current scene
+    let idx = 0;
+    for (let i = 0; i < TL.length; i++) {
+      if (clamped >= TL[i][1] && clamped < TL[i][2]) { idx = i; break; }
+      if (clamped >= TL[i][2]) idx = i;
+    }
+    setActive(idx);
+
+    // scene-specific animations
+    if (idx === 0) triggerScene1FallAt(clamped);
+    if (idx === 4) animateScene5(clamped - TL[4][1]);
+
+    // progress
+    $("pf").style.width = (clamped / DURATION * 100) + "%";
+    const sec = Math.floor(clamped / 1000);
+    const mm = String(Math.floor(sec / 60)).padStart(2,"0");
+    const ss = String(sec % 60).padStart(2,"0");
+    $("clock").textContent = `${mm}:${ss}`;
+
+    if (t < DURATION) {
+      raf = requestAnimationFrame(tick);
+    }
+  }
+
+  function startVisuals() {
+    startedAt = performance.now();
+    raf = requestAnimationFrame(tick);
+  }
+
+  async function play() {
+    cancelAnimationFrame(raf);
+    // reset visuals
+    $("s1").dataset.fell = "";
+    buildHeadline();
+    buildDots();
+    scenes.forEach(s => {
+      // force reflow to re-trigger CSS animations
+      s.classList.remove("active");
+      void s.offsetWidth;
+    });
+    stopAllAudio();
+
+    if (soundEnabled) {
+      initAudio();
+      if (audioCtx) {
+        try {
+          await audioCtx.resume();
+        } catch (e) {
+          console.error("[mem0] resume failed:", e);
+        }
+        console.log("[mem0] post-resume state:", audioCtx.state, "currentTime:", audioCtx.currentTime);
+        if (audioCtx.state === "running") {
+          scheduleScore(audioCtx.currentTime + 0.15);
+          console.log("[mem0] score scheduled, liveNodes:", liveNodes.length);
+        } else {
+          console.warn("[mem0] audio still suspended — click replay to enable");
+        }
+      }
+    }
+
+    startVisuals();
+  }
+
+  $("play").addEventListener("click", play);
+  $("mute").addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    $("mute").textContent = "sound: " + (soundEnabled ? "on" : "off");
+    if (!soundEnabled) stopAllAudio();
+  });
+  play();
+</script>
+</body>
+</html>
