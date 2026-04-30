@@ -1,29 +1,29 @@
 # Plain-language breakdown - week of 2026-04-30
 
-## Hermes Agent (NousResearch)
+## Gemini CLI (Google)
 
-Hermes is a personal AI assistant that runs on your own machine or a cheap cloud server and connects to messaging apps like Telegram, Discord, and Slack so you can talk to it from anywhere.
+Gemini CLI is a free command-line tool from Google that lets you have a conversation with an AI directly in your terminal, where the AI can read your files, run shell commands, and search the web on your behalf.
 
-What makes it matter is that it learns from your conversations over time, builds up a library of reusable routines it has created for you, and gets better at working with you the longer you use it.
+It matters because it gives developers a practical way to automate repetitive coding tasks without leaving their workflow, and because Google made it completely free for personal use up to 1,000 requests per day.
 
-What makes it different from other AI assistants is that instead of starting fresh every conversation, Hermes searches its own history to find what it already knows about you and your projects, and it writes new skills automatically when it figures out a better way to do something.
+What makes it different from other AI tools is that it has a built-in test suite specifically designed to catch cases where the AI stops making the right decisions after a code change, not just cases where the code itself stops running.
 
-## MemPalace
+## oh-my-openagent
 
-MemPalace is a memory system for AI agents that stores your conversations exactly as you wrote them and then finds the right ones later using a mix of word-matching and meaning-matching.
+Oh-my-openagent is a system that coordinates a team of AI specialists working together on a coding task, where each specialist has a defined job: one plans, one writes code, one reviews the plan, one searches the codebase, and one advises on architecture.
 
-It matters because agents with good memory can answer questions like "what did we decide about that three weeks ago" instead of requiring you to repeat context every time you start a new session.
+It matters because having one AI try to do all of those jobs at once usually produces worse results than having specialized roles with clear handoff points, similar to how a well-run software team outperforms a single developer doing everything.
 
-What makes it different is that it achieves 99.4% accuracy in finding the right conversation from a large history without needing a cloud service or an API key for the core path, and it organizes memories into categories at save time so searches are faster and more precise.
+What makes it different is that when you add a new specialist to the team, the coordinator automatically learns what that specialist is good at and when to call on them, rather than requiring someone to update a routing chart by hand.
 
-## Agent Orchestrator (Composio)
+## Dify
 
-Agent Orchestrator is a tool for software teams that automatically spins up multiple AI coding agents working in parallel, each one handling a different issue or bug fix in its own isolated copy of the codebase.
+Dify is an open-source platform where you can build AI-powered workflows by connecting blocks together visually, similar to how you might build a flowchart, then deploy those workflows as a product.
 
-It matters because running one AI coding agent is easy but coordinating a fleet of them across dozens of open tasks, each with its own branch and pull request, is a coordination problem most teams solve manually today.
+It matters because it handles the difficult infrastructure work of running AI tasks reliably in production, including keeping track of state across steps, handling failures, and logging what happened when something goes wrong.
 
-What makes it different is that when a build fails or a code reviewer requests changes, the system automatically sends the failure details back to the responsible agent to fix rather than waiting for a human to copy and paste the error message.
+What makes it different is that it supports two completely different ways for the AI to reason through a task and automatically picks the right one based on what the AI model is capable of, rather than forcing every task through the same execution pattern.
 
 ## Why this week mattered
 
-All three projects this week are building toward the same underlying idea: AI agents that get better at a specific job through structured memory and feedback rather than through retraining or starting over. MemPalace showed that you do not need a large language model to retrieve the right memory 96% of the time, only a well-structured index and a simple scoring formula. Hermes and Agent Orchestrator each apply that same principle to their own domains: the agent that remembers what worked before does not need to figure it out again.
+All three projects this week point toward the same shift: the teams getting the most out of AI agents are building systems that coordinate multiple specialized roles rather than asking a single model to do everything. Gemini CLI showed that behavioral testing is becoming as important as code testing for this kind of system. Oh-my-openagent showed that the routing logic connecting those roles works better when it reads from a live description of each role's capabilities rather than from a document someone wrote once and forgot to update. That gap between what the coordinator thinks an agent can do and what the agent actually does today is where most multi-agent failures quietly happen.

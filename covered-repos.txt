@@ -10,3 +10,6 @@ aaif-goose/goose
 NousResearch/hermes-agent
 MemPalace/mempalace
 ComposioHQ/agent-orchestrator
+google-gemini/gemini-cli
+code-yeongyu/oh-my-openagent
+langgenius/dify

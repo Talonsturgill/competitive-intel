@@ -1,17 +1,9 @@
-![Cover](linkedin-video-2026-04-30.mp4)
+**Most multi-agent systems route on instinct. oh-my-openagent routes from a manifest.** I cloned 25 trending agent repos this week and one pattern kept me re-reading the source. When Sisyphus, the orchestrator, boots up, it does not start with a hardcoded routing table.
 
-*Cover video. Upload as native LinkedIn video. Use linkedin-thumbnail-2026-04-30.png as the custom thumbnail.*
+Every sub-agent in the system publishes a metadata block. Trigger domains. When to use it. When to avoid it. A single builder function reads all those manifests and assembles the orchestrator's delegation table at startup. Add a new agent. The table rebuilds. Remove one. The table shrinks. The orchestrator never carries stale knowledge about what it can route to.
 
----
+This solves something specific. An orchestrator that routes to an agent with capabilities it no longer has fails silently. The manifest approach makes that impossible because the routing table is always built from what actually exists.
 
-**Most retrieval systems fail not because the answer is missing but because the scoring formula treats all distance equally.** MemPalace published benchmarks this week that changed how I think about memory for AI agents. 96.6% recall at rank 5 on LongMemEval, zero API key, zero LLM calls.
+There is also an identity injection pattern in the same codebase. Each sub-agent prompt opens with an XML block that explicitly overrides the base model's prior identity. Sisyphus is Sisyphus. The base model's default behavior is displaced, not appended to. In long multi-turn sessions, base model identity bleeds back through. This shuts that down.
 
-The core formula is one expression. Fused distance equals semantic distance times one minus 0.30 times keyword overlap. Dense vector search combined with sparse keyword matching, no learned weights, no training data.
-
-Three tiers, each activating only when the tier below fails. Tier one handles 96.6% locally. Tier two adds temporal proximity boosting and a two-pass approach for assistant-reference questions, reaching 98.4% without any API. Tier three sends the top-20 to a small model for one pick.
-
-Content is typed at storage time into halls by content type. Preferences, facts, events, and assistant advice each get their own hall. A facts question searches only the facts hall before scoring begins. Hall-validated sessions get a 25% distance reduction in the final ranking.
-
-What MemPalace got right is verbatim storage plus structural scoping over summarization. Every other memory system compresses the original content. This one keeps the raw text.
-
-The benchmark failures are public. The wrong answers are in the repo. That transparency is the signal that matters most.
+The repo has 55k stars and ships cross-platform binaries. The delegation manifest pattern is small enough to port in a day.
