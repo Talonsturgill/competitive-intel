@@ -52,5 +52,6 @@ LinkedIn post format:
 
 ## Branch and PR convention
 
-Routine writes to a branch named claude/trending-YYYY-MM-DD and opens a PR
-against main. Never push directly to main.
+Routine commits directly to main. No feature branch, no PR. The Pages
+workflow watches videos/** on main and auto-deploys, so each weekly run
+publishes the new video without manual merging.
