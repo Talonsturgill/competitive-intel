@@ -6,6 +6,7 @@ on:
     paths:
       - "videos/**"
       - ".github/workflows/pages.yml"
+      - ".github/workflows/build-index.py"
   workflow_dispatch:
 
 permissions:
@@ -25,6 +26,7 @@ jobs:
 
       - name: Generate index.html
         run: |
+          mkdir -p videos
           cd videos
           python3 ../.github/workflows/build-index.py > index.html
 
