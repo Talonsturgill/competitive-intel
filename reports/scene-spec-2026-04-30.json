@@ -1,0 +1,57 @@
+{
+  "date": "2026-04-30",
+  "theme": {
+    "background": "#05070A",
+    "ink": "#EAF4FF",
+    "accent": "#4AA3FF",
+    "muted": "#787E85",
+    "rule": "#1C1F23",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "scenes": {
+    "title": {
+      "headline": "Memory Retrieval",
+      "eyebrow": "what MemPalace shipped"
+    },
+    "three_things": {
+      "eyebrow": "THREE TIERS",
+      "items": [
+        {"name": "Semantic", "descriptor": "96.6% baseline"},
+        {"name": "Hybrid", "descriptor": "keyword and date"},
+        {"name": "LLM rerank", "descriptor": "one pick from 20"}
+      ]
+    },
+    "problem": {
+      "line_a": "Distance alone",
+      "line_b": "misses context.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "Keywords score up",
+      "line_b": "what embeddings",
+      "line_c": "ranked too low.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Fuse the signals.",
+      "secondary": "No API key needed."
+    },
+    "mechanism": {
+      "line_a": "Semantic distance",
+      "line_b": "times keyword overlap",
+      "line_c": "96.6% no LLM.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "Compress and lose.",
+      "line_b": "Summarization drops",
+      "line_c": "the keywords."
+    },
+    "close": {
+      "primary": "Keep the text.",
+      "accent": "Math finds it.",
+      "subtitle": "benchmarked and open source"
+    }
+  }
+}
