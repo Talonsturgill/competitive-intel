@@ -7,3 +7,6 @@ upstash/context7
 ChromDevTools/chrome-devtools-mcp
 agno-agi/agno
 aaif-goose/goose
+NousResearch/hermes-agent
+MemPalace/mempalace
+ComposioHQ/agent-orchestrator
