@@ -1,0 +1,58 @@
+{
+  "date": "2026-05-03",
+  "topic": "pydantic-ai capability-ordered interception hooks",
+  "theme": {
+    "background": "#FFFFFF",
+    "ink": "#191919",
+    "accent": "#0072CE",
+    "muted": "#8C8C8C",
+    "rule": "#E8E8E8",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "scenes": {
+    "title": {
+      "headline": "Four Layers",
+      "eyebrow": "pydantic-ai teardown"
+    },
+    "three_things": {
+      "eyebrow": "FOUR SLOTS",
+      "items": [
+        {"name": "Model Request", "descriptor": "inject before model"},
+        {"name": "Tool Execute", "descriptor": "before the tool fires"},
+        {"name": "Output Validate", "descriptor": "accept or retry"}
+      ]
+    },
+    "problem": {
+      "line_a": "One big agent,",
+      "line_b": "one big mess.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "Every Code node",
+      "line_b": "fighting",
+      "line_c": "the system prompt.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Name the layers.",
+      "secondary": "Give each one job."
+    },
+    "mechanism": {
+      "line_a": "Wrap the run.",
+      "line_b": "Wrap the model call.",
+      "line_c": "Wrap the output.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "Miss one layer,",
+      "line_b": "everything",
+      "line_c": "lives in the prompt."
+    },
+    "close": {
+      "primary": "Name the layers.",
+      "accent": "Stack them clean.",
+      "subtitle": "what most builders skip"
+    }
+  }
+}
