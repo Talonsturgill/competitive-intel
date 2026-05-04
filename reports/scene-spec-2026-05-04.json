@@ -1,0 +1,58 @@
+{
+  "date": "2026-05-04",
+  "topic": "EvoMap Evolver triple-gated capsule promotion",
+  "theme": {
+    "background": "#000000",
+    "ink": "#ededed",
+    "accent": "#3377FF",
+    "muted": "#777777",
+    "rule": "#181818",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "scenes": {
+    "title": {
+      "headline": "Gene Evolution",
+      "eyebrow": "what evolver got right"
+    },
+    "three_things": {
+      "eyebrow": "THREE GATES",
+      "items": [
+        {"name": "Outcome score", "descriptor": "above 0.7"},
+        {"name": "Success streak", "descriptor": "two in a row"},
+        {"name": "Blast radius", "descriptor": "five files max"}
+      ]
+    },
+    "problem": {
+      "line_a": "One good run.",
+      "line_b": "Means nothing.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "High score.",
+      "line_b": "First run only.",
+      "line_c": "Noise as signal.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Streak gates.",
+      "secondary": "Two in a row wins."
+    },
+    "mechanism": {
+      "line_a": "Score above 0.7.",
+      "line_b": "Two consecutive wins.",
+      "line_c": "Scope stays tight.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "Skip the streak.",
+      "line_b": "You ship noise",
+      "line_c": "as a pattern."
+    },
+    "close": {
+      "primary": "Streak gates.",
+      "accent": "Trust the signal.",
+      "subtitle": "the gate most builders skip"
+    }
+  }
+}
