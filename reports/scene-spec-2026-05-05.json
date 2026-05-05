@@ -1,0 +1,50 @@
+{
+  "date": "2026-05-05",
+  "topic": "pydantic-ai typed graph agent loop with checkpoint execution",
+  "theme": "default",
+  "scenes": {
+    "title": {
+      "headline": "Name the Loop",
+      "eyebrow": "pydantic-ai teardown"
+    },
+    "three_things": {
+      "eyebrow": "THREE NODE TYPES",
+      "items": [
+        {"name": "UserPromptNode", "descriptor": "user prompt intake"},
+        {"name": "ModelRequestNode", "descriptor": "model call and history"},
+        {"name": "CallToolsNode", "descriptor": "tool results and output"}
+      ]
+    },
+    "problem": {
+      "line_a": "Agents restart",
+      "line_b": "from the top.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "Paid API called.",
+      "line_b": "Database written.",
+      "line_c": "Process crashed.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Name the steps.",
+      "secondary": "Checkpoint each one."
+    },
+    "mechanism": {
+      "line_a": "Three graph node types.",
+      "line_b": "Each checkpoints state.",
+      "line_c": "Crash restarts from node.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "No named nodes means",
+      "line_b": "no restart point.",
+      "line_c": "Begin again from zero."
+    },
+    "close": {
+      "primary": "Name the steps.",
+      "accent": "Then checkpoint.",
+      "subtitle": "the pattern most n8n builders miss."
+    }
+  }
+}

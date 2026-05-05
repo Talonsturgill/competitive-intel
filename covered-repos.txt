@@ -10,3 +10,6 @@ aaif-goose/goose
 NousResearch/hermes-agent
 MemPalace/mempalace
 ComposioHQ/agent-orchestrator
+EvoMap/evolver
+pydantic/pydantic-ai
+SolaceLabs/solace-agent-mesh
