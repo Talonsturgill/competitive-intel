@@ -1,0 +1,50 @@
+{
+  "date": "2026-05-06",
+  "topic": "MemOS four-layer memory cube with scheduler",
+  "theme": "default",
+  "scenes": {
+    "title": {
+      "headline": "Four-Layer Memory",
+      "eyebrow": "what memos got right"
+    },
+    "three_things": {
+      "eyebrow": "THREE STORES",
+      "items": [
+        {"name": "Textual", "descriptor": "episodic context"},
+        {"name": "Activation", "descriptor": "KV cache state"},
+        {"name": "Preference", "descriptor": "user patterns"}
+      ]
+    },
+    "problem": {
+      "line_a": "One store tries",
+      "line_b": "four distinct jobs.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "Two retrieval signals",
+      "line_b": "look identical",
+      "line_c": "inside one flat store.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Schedule first.",
+      "secondary": "Then retrieve."
+    },
+    "mechanism": {
+      "line_a": "Match the query signal",
+      "line_b": "to the right store",
+      "line_c": "before retrieval runs.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "Flat retrieval",
+      "line_b": "degrades at scale.",
+      "line_c": "The scheduler holds."
+    },
+    "close": {
+      "primary": "Schedule first.",
+      "accent": "Then retrieve.",
+      "subtitle": "the step builders skip"
+    }
+  }
+}
