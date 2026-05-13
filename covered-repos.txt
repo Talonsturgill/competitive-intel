@@ -10,3 +10,6 @@ aaif-goose/goose
 NousResearch/hermes-agent
 MemPalace/mempalace
 ComposioHQ/agent-orchestrator
+VectifyAI/PageIndex
+Yeachan-Heo/oh-my-claudecode
+daytonaio/daytona
