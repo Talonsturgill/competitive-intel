@@ -1,0 +1,50 @@
+{
+  "date": "2026-05-13",
+  "topic": "PageIndex hierarchical tree index retrieval",
+  "theme": "default",
+  "scenes": {
+    "title": {
+      "headline": "Tree Index RAG",
+      "eyebrow": "the retrieval pattern"
+    },
+    "three_things": {
+      "eyebrow": "THE PATTERN",
+      "items": [
+        {"name": "Index", "descriptor": "build a structure tree"},
+        {"name": "Reason", "descriptor": "pick the right nodes"},
+        {"name": "Fetch", "descriptor": "only those pages"}
+      ]
+    },
+    "problem": {
+      "line_a": "Similarity",
+      "line_b": "is not relevance.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "The answer lives",
+      "line_b": "in Section 4.2.",
+      "line_c": "Vectors miss that.",
+      "accent_line": "c"
+    },
+    "fix": {
+      "primary": "Index first.",
+      "secondary": "reason over the tree."
+    },
+    "mechanism": {
+      "line_a": "LLM sees the tree.",
+      "line_b": "Finds the right nodes.",
+      "line_c": "Fetch just those.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "Chunked, embedded,",
+      "line_b": "but the answer",
+      "line_c": "was in section 4."
+    },
+    "close": {
+      "primary": "Index first.",
+      "accent": "Reason over it.",
+      "subtitle": "what vector RAG skips."
+    }
+  }
+}
