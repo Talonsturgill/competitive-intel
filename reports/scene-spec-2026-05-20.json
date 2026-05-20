@@ -1,0 +1,58 @@
+{
+  "date": "2026-05-20",
+  "topic": "interception-first declarative policy gate with fail-closed default",
+  "theme": {
+    "background": "#FFFFFF",
+    "ink": "#242424",
+    "accent": "#0078D4",
+    "muted": "#929292",
+    "rule": "#E9E9E9",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "scenes": {
+    "title": {
+      "headline": "Policy Gate",
+      "eyebrow": "what AGT shipped"
+    },
+    "three_things": {
+      "eyebrow": "THREE LAYERS",
+      "items": [
+        {"name": "Execution gate", "descriptor": "35k ops per second"},
+        {"name": "MCP scanner", "descriptor": "at registration time"},
+        {"name": "Fail-closed", "descriptor": "error means deny"}
+      ]
+    },
+    "problem": {
+      "line_a": "Prompt safety",
+      "line_b": "trusts the model.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "A poisoned MCP tool",
+      "line_b": "plants instructions",
+      "line_c": "the model follows.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Gate outside.",
+      "secondary": "Not inside the model."
+    },
+    "mechanism": {
+      "line_a": "Every tool call",
+      "line_b": "hits a policy check",
+      "line_c": "deny on error.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "No fail-closed gate",
+      "line_b": "means a broken check",
+      "line_c": "still passes."
+    },
+    "close": {
+      "primary": "Two gates.",
+      "accent": "Both outside.",
+      "subtitle": "not inside the model"
+    }
+  }
+}
