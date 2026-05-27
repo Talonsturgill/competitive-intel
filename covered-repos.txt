@@ -10,3 +10,6 @@ aaif-goose/goose
 NousResearch/hermes-agent
 MemPalace/mempalace
 ComposioHQ/agent-orchestrator
+thedotmack/claude-mem
+lobehub/lobehub
+infiniflow/ragflow
