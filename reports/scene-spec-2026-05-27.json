@@ -1,0 +1,50 @@
+{
+  "date": "2026-05-27",
+  "topic": "claude-mem two-tier progressive disclosure memory injection",
+  "theme": "default",
+  "scenes": {
+    "title": {
+      "headline": "Two-Tier Memory",
+      "eyebrow": "CLAUDE-MEM"
+    },
+    "three_things": {
+      "eyebrow": "THREE LAYERS",
+      "items": [
+        {"name": "Capture", "descriptor": "observe every tool call"},
+        {"name": "Compress", "descriptor": "structured LLM extract"},
+        {"name": "Inject", "descriptor": "recency-ranked context"}
+      ]
+    },
+    "problem": {
+      "line_a": "All context.",
+      "line_b": "Or none at all.",
+      "accent_line": "a"
+    },
+    "specific_case": {
+      "line_a": "Dump old context",
+      "line_b": "and the window fills.",
+      "line_c": "Nothing gets through.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Two tiers.",
+      "secondary": "Recent full. Old rows."
+    },
+    "mechanism": {
+      "line_a": "Newest items render",
+      "line_b": "Older ones compress",
+      "line_c": "The ratio is logged.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "Without tiering,",
+      "line_b": "old noise buries",
+      "line_c": "fresh signal."
+    },
+    "close": {
+      "primary": "Build the tiers.",
+      "accent": "Track the savings.",
+      "subtitle": "cost-aware memory by design"
+    }
+  }
+}
