@@ -1,0 +1,58 @@
+{
+  "date": "2026-06-03",
+  "topic": "Microsoft Agent Framework checkpointed superstep workflows",
+  "theme": {
+    "background": "#ffffff",
+    "ink": "#161616",
+    "accent": "#0078d4",
+    "muted": "#8a8a8a",
+    "rule": "#e8e8e8",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "scenes": {
+    "title": {
+      "headline": "Resume, Don't Restart",
+      "eyebrow": "what agent framework got right"
+    },
+    "three_things": {
+      "eyebrow": "ONE SNAPSHOT",
+      "items": [
+        {"name": "State", "descriptor": "what is committed"},
+        {"name": "Messages", "descriptor": "what is still in flight"},
+        {"name": "Approvals", "descriptor": "what waits on a human"}
+      ]
+    },
+    "problem": {
+      "line_a": "One failed step",
+      "line_b": "ends the whole run.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "A tool throws at",
+      "line_b": "step nine of ten.",
+      "line_c": "Back to step one.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Snapshot the step.",
+      "secondary": "Resume, never replay."
+    },
+    "mechanism": {
+      "line_a": "Each snapshot chains",
+      "line_b": "to the one before it,",
+      "line_c": "so you can rewind.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "Lose the snapshot",
+      "line_b": "and one bad step",
+      "line_c": "burns the whole run."
+    },
+    "close": {
+      "primary": "Resume the run.",
+      "accent": "Don't repeat it.",
+      "subtitle": "the part most agent builders skip."
+    }
+  }
+}
