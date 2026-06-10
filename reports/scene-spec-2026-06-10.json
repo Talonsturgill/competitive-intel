@@ -1,0 +1,58 @@
+{
+  "date": "2026-06-10",
+  "topic": "federated MCP gateway with namespaced registry and health-gated routing",
+  "theme": {
+    "background": "#1E2129",
+    "ink": "#E2E4E9",
+    "accent": "#4287FF",
+    "muted": "#808289",
+    "rule": "#32343C",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "scenes": {
+    "title": {
+      "headline": "MCP Gateway",
+      "eyebrow": "what IBM just shipped"
+    },
+    "three_things": {
+      "eyebrow": "THREE MOVES",
+      "items": [
+        {"name": "Namespace", "descriptor": "every tool scoped"},
+        {"name": "Translate", "descriptor": "stdio over HTTP"},
+        {"name": "Health gate", "descriptor": "drop dead backends"}
+      ]
+    },
+    "problem": {
+      "line_a": "Five MCP servers",
+      "line_b": "and names collide.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "Two servers both",
+      "line_b": "expose one tool",
+      "line_c": "named search.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "One endpoint.",
+      "secondary": "Every tool namespaced."
+    },
+    "mechanism": {
+      "line_a": "Probe each backend",
+      "line_b": "on a schedule",
+      "line_c": "drop it before the call.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "A dead tool fails",
+      "line_b": "at the front door,",
+      "line_c": "not mid reasoning."
+    },
+    "close": {
+      "primary": "One door.",
+      "accent": "One gate.",
+      "subtitle": "the part most builders skip"
+    }
+  }
+}
