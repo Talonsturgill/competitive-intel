@@ -1,0 +1,58 @@
+{
+  "date": "2026-06-17",
+  "topic": "open-multi-agent runtime goal-to-DAG decomposition with replayable plan",
+  "theme": {
+    "background": "#020504",
+    "ink": "#ffffff",
+    "accent": "#f5d94e",
+    "muted": "#808282",
+    "rule": "#1b1e1d",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "scenes": {
+    "title": {
+      "headline": "Goal to DAG",
+      "eyebrow": "what open-multi-agent ships"
+    },
+    "three_things": {
+      "eyebrow": "THREE MOVES",
+      "items": [
+        {"name": "Decompose", "descriptor": "goal into a task DAG"},
+        {"name": "Parallelize", "descriptor": "independent tasks"},
+        {"name": "Replay", "descriptor": "the saved plan"}
+      ]
+    },
+    "problem": {
+      "line_a": "You wire the graph",
+      "line_b": "before the work.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "Change the goal",
+      "line_b": "and the whole graph",
+      "line_c": "is wrong.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Describe the goal.",
+      "secondary": "Not the graph."
+    },
+    "mechanism": {
+      "line_a": "The coordinator",
+      "line_b": "decomposes once",
+      "line_c": "then caches it.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "Rebuild every run",
+      "line_b": "and you pay",
+      "line_c": "for it twice."
+    },
+    "close": {
+      "primary": "Describe the goal.",
+      "accent": "Keep the plan.",
+      "subtitle": "what most builders miss."
+    }
+  }
+}
