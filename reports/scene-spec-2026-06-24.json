@@ -1,0 +1,30 @@
+{
+  "date": "2026-06-24",
+  "topic": "headroom content-routed reversible context compression",
+  "theme": {
+    "background": "#FFFFFF",
+    "ink": "#191919",
+    "accent": "#673AB7",
+    "muted": "#8C8C8C",
+    "rule": "#E8E8E8",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "scenes": {
+    "title": { "headline": "Context Compression", "eyebrow": "what headroom just shipped" },
+    "three_things": {
+      "eyebrow": "THREE MOVES",
+      "items": [
+        { "name": "Route", "descriptor": "compressor per type" },
+        { "name": "Retain", "descriptor": "originals stay fetchable" },
+        { "name": "Realign", "descriptor": "stable prompt prefix" }
+      ]
+    },
+    "problem": { "line_a": "Cutting context", "line_b": "breaks recall.", "accent_line": "b" },
+    "specific_case": { "line_a": "A dropped log line", "line_b": "is the answer", "line_c": "you needed.", "accent_line": "b" },
+    "fix": { "primary": "Route, do not cut.", "secondary": "Keep the original." },
+    "mechanism": { "line_a": "Each payload routes to", "line_b": "a compressor built for it.", "line_c": "The original stays cached.", "accent_line": "c" },
+    "consequence": { "line_a": "Nothing is lost", "line_b": "that you cannot", "line_c": "pull back later." },
+    "close": { "primary": "Compress hard.", "accent": "Hold the prefix.", "subtitle": "stable prefixes keep the cache warm." }
+  }
+}
