@@ -10,3 +10,6 @@ aaif-goose/goose
 NousResearch/hermes-agent
 MemPalace/mempalace
 ComposioHQ/agent-orchestrator
+headroomlabs-ai/headroom
+MemTensor/MemOS
+microsoft/agent-framework
