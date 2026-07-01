@@ -1,0 +1,58 @@
+{
+  "date": "2026-07-01",
+  "topic": "zeroshot blind independent validation gate",
+  "theme": {
+    "background": "#FAF7F1",
+    "ink": "#0F172A",
+    "accent": "#C2240C",
+    "muted": "#84878E",
+    "rule": "#E2E1DD",
+    "serif": "'Bitstream Charter', 'DejaVu Serif', Georgia, serif",
+    "sans": "'DejaVu Sans', sans-serif"
+  },
+  "scenes": {
+    "title": {
+      "headline": "Blind Validation",
+      "eyebrow": "what zeroshot got right"
+    },
+    "three_things": {
+      "eyebrow": "THE VALIDATORS",
+      "items": [
+        {"name": "Requirements", "descriptor": "did it meet the ask"},
+        {"name": "Security", "descriptor": "no new holes"},
+        {"name": "Adversarial", "descriptor": "tries to break it"}
+      ]
+    },
+    "problem": {
+      "line_a": "Critics inherit",
+      "line_b": "the author blind spot.",
+      "accent_line": "b"
+    },
+    "specific_case": {
+      "line_a": "A confident wrong answer",
+      "line_b": "reads as correct.",
+      "line_c": "The story hides it.",
+      "accent_line": "b"
+    },
+    "fix": {
+      "primary": "Hide the author.",
+      "secondary": "Show only the diff."
+    },
+    "mechanism": {
+      "line_a": "Validators get the diff",
+      "line_b": "and the acceptance rules.",
+      "line_c": "Nothing else.",
+      "accent_line": "c"
+    },
+    "consequence": {
+      "line_a": "A rejection is not",
+      "line_b": "a note. It is a",
+      "line_c": "reproducible failure."
+    },
+    "close": {
+      "primary": "Split the author",
+      "accent": "from the judge.",
+      "subtitle": "the part most builders miss"
+    }
+  }
+}
